@@ -1,1 +1,234 @@
-# premier-league-standings-api
+# Premier League Standings ETL Pipeline
+
+### **API → Python → MySQL → Query-Ready Table**
+
+During football season in public places all people who use the Wi-Fi would like to see the ranking and positions of their favourite team , the traffic then get heavy on the local router and people can not get a connection , this creates crowd unsettlement and ruins the atmosphere.
+The idea is to connect to a live football standing API and get the results on the screen as a table. 
+The project demonstrates an end-to-end data pipeline that automatically retrieves Premier League standings from a public API, processes the data using Python, and loads it into a MySQL relational database using a clean and safe upset (INSERT…ON DUPLICATE KEY UPDATE) workflow.
+
+
+
+## **Tools Used**
+
+| Component           | Technology                                   |
+| ------------------- | -------------------------------------------- |
+| **API**             | RapidAPI – Premier League Standings endpoint |
+| **Data Processing** | Python (requests, json, pandas)              |
+| **Database**        | MySQL 8.0                                    |
+| **ETL Logic**       | Python + SQL (UPSERT)                        |
+| **IDE**             | VS Code / Jupyter Notebook                   |
+| **Version Control** | Git + GitHub                                 |
+
+## **Project Objectives**
+
+ Connect to a live football standings API
+ Parse and transform raw JSON response into a clean tabular format
+ Implement SQL UPSERT to load/refresh standings
+ Build a reproducible ETL pipeline using Python
+ Store standings in a MySQL database for analytics
+
+
+
+## Repository Structure
+
+
+premier-league-standings-api/
+
+ main.py                  # Python ETL script (API → MySQL)
+ analysis.ipynb           # Exploratory analysis & testing notebook
+ .env                     # API keys & DB secrets (ignored in Git)
+ .gitignore               # Prevents secrets & temp files from committing
+ README.md                # Project documentation
+
+
+
+
+## **How the Pipeline Works**
+
+### **1. Fetch Data from API (main.py)**
+
+The Python script sends a GET request to the standings endpoint using your API key stored in `.env`.
+
+
+response = requests.get(API_URL, headers={"X-RapidAPI-Key": api_key})
+data = response.json()
+
+
+
+
+### **2. Transform JSON to Python Tuples**
+
+The script extracts all required fields:
+
+* season
+* position
+* team_id
+* team name
+* matches played, won, lost, draw
+* goals for / against
+* goal difference
+* points
+* form (WWDL etc.)
+
+Results are stored in a list of Python tuples ready for SQL insertion.
+
+
+
+### **3. Load to MySQL Using UPSERT**
+
+To avoid duplicates, the SQL script uses:
+
+INSERT INTO standings (season, position, team_id, team, played, won, draw, lost,
+                       goals_for, goals_against, goal_diff, points, form)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+* ON DUPLICATE KEY UPDATE
+* position = VALUES(position),
+* played = VALUES(played),
+* won = VALUES(won),
+* draw = VALUES(draw),
+* lost = VALUES(lost),
+* goals_for = VALUES(goals_for),
+* goals_against = VALUES(goals_against),
+* goal_diff = VALUES(goal_diff),
+* points = VALUES(points),
+* form = VALUES(form);
+
+
+This ensures:
+
+* No duplicated teams
+* Standings update cleanly every run
+* MySQL stays synced with the newest season
+
+
+
+### **4. Confirmation of Load**
+
+The notebook prints:
+
+
+[SUCCESS] – Upsert attempted for 20 rows!
+All database connections now closed.
+
+
+And MySQL Workbench displays the final table, sorted by position:
+
+| position | team            | played | won | lost | points |
+| -------- | --------------- | ------ | --- | ---- | ------ |
+| 1        | Manchester City | 38     | 29  | 3    | 93     |
+| 2        | Liverpool       | 38     | 28  | 2    | 92     |
+| ...      | ...             | ...    | ... | ...  | ...    |
+
+---
+
+## SQL Table Schema
+
+### **Table: standings**
+
+sql
+CREATE TABLE standings (
+    season INT NOT NULL,
+    position INT NOT NULL,
+    team_id INT NOT NULL,
+    team VARCHAR(100),
+    played INT,
+    won INT,
+    draw INT,
+    lost INT,
+    goals_for INT,
+    goals_against INT,
+    goal_diff INT,
+    points INT,
+    form VARCHAR(20),
+    PRIMARY KEY (season, team_id)
+);
+
+
+
+
+## How to Run the Project
+
+### **1. Clone the repository**
+
+bash
+git clone https://github.com/malhussein-bit/premier-league-standings-api.git
+
+
+### **2. Install dependencies**
+
+bash
+pip install mysql-connector-python python-dotenv requests pandas
+
+
+### **3. Update `.env` file**
+
+
+API_KEY=rapid_api_key
+MYSQL_USER=root
+MYSQL_PASSWORD=xxxx
+MYSQL_HOST=localhost
+MYSQL_DATABASE=premier_league_db
+
+
+### **4. Run the pipeline**
+
+bash
+python main.py
+
+
+
+
+## Example SQL Queries for Analysis
+
+**Teams sorted by points:**
+
+sql
+SELECT team, points 
+FROM standings
+ORDER BY points DESC;
+
+
+**Best offensive teams (goals_for):**
+
+sql
+SELECT team, goals_for 
+FROM standings 
+ORDER BY goals_for DESC 
+LIMIT 5;
+
+
+**Win percentage:**
+
+sql
+*SELECT team,
+       ROUND((won / played) * 100, 2) AS win_rate
+*FROM standings
+*ORDER BY win_rate DESC;
+
+
+
+
+## Skills Demonstrated
+
+* API integration
+* ETL design
+* Data cleansing
+* Secure key management (.env + .gitignore)
+* SQL schema & indexing
+* MySQL UPSERT patterns
+* Python error handling & transaction control
+* Git version control
+* Reproducible pipeline structure
+
+
+
+## 📬 Contact
+
+**Mohammad Al Hussein**
+[alhussein.m65@gmail.com](mailto:alhussein.m65@gmail.com)
+GitHub: [https://github.com/malhussein-bit](https://github.com/malhussein-bit)
+
+
+
+
+└── README.md                # Project documentation
