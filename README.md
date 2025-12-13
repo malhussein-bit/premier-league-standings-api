@@ -76,9 +76,30 @@ The script extracts all required fields:
 
 Results are stored in a list of Python tuples ready for SQL insertion.
 
+## 3. SQL Table Schema
 
+### **Table: standings**
 
-### **3. Load to MySQL Using UPSERT**
+```sql
+CREATE TABLE standings (
+    season INT NOT NULL,
+    position INT NOT NULL,
+    team_id INT NOT NULL,
+    team VARCHAR(100),
+    played INT,
+    won INT,
+    draw INT,
+    lost INT,
+    goals_for INT,
+    goals_against INT,
+    goal_diff INT,
+    points INT,
+    form VARCHAR(20),
+    PRIMARY KEY (season, team_id)
+);
+```
+
+### **4. Load to MySQL Using UPSERT**
 
 To avoid duplicates, the SQL script uses:
 
@@ -106,7 +127,7 @@ This ensures:
 
 
 
-### **4. Confirmation of Load**
+### **5. Confirmation of Load**
 
 The notebook prints:
 
@@ -114,7 +135,7 @@ The notebook prints:
 [SUCCESS] – Upsert attempted for 20 rows!
 All database connections now closed.
 
-### Final MySQL Output
+### **6. Final MySQL Output**
 
 The standings table is populated and validated in MySQL,
 sorted by league position and ready for analytical queries.
@@ -132,28 +153,6 @@ for further analysis and BI integration.
 
 ---
 
-## SQL Table Schema
-
-### **Table: standings**
-
-```sql
-CREATE TABLE standings (
-    season INT NOT NULL,
-    position INT NOT NULL,
-    team_id INT NOT NULL,
-    team VARCHAR(100),
-    played INT,
-    won INT,
-    draw INT,
-    lost INT,
-    goals_for INT,
-    goals_against INT,
-    goal_diff INT,
-    points INT,
-    form VARCHAR(20),
-    PRIMARY KEY (season, team_id)
-);
-```
 
 
 
