@@ -1,7 +1,11 @@
-# Premier League Standings ETL Pipeline
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
+![Status](https://img.shields.io/badge/Status-Portfolio%20Ready-success)
+
+# Premier League Standings ETL Pipeline SEASON 2021
 
 ### **API → Python → MySQL → Query-Ready Table**
-
+### Overview
 During football season in public places all people who use the Wi-Fi would like to see the ranking and positions of their favourite team , the traffic then get heavy on the local router and people can not get a connection , this creates crowd unsettlement and ruins the atmosphere.
 The idea is to connect to a live football standing API and get the results on the screen as a table. 
 The project demonstrates an end-to-end data pipeline that automatically retrieves Premier League standings from a public API, processes the data using Python, and loads it into a MySQL relational database using a clean and safe upset (INSERT…ON DUPLICATE KEY UPDATE) workflow.
@@ -21,11 +25,11 @@ The project demonstrates an end-to-end data pipeline that automatically retrieve
 
 ## **Project Objectives**
 
- Connect to a live football standings API
- Parse and transform raw JSON response into a clean tabular format
- Implement SQL UPSERT to load/refresh standings
- Build a reproducible ETL pipeline using Python
- Store standings in a MySQL database for analytics
+Connect to a live football standings API
+Parse and transform raw JSON response into a clean tabular format
+Implement SQL UPSERT to load/refresh standings
+Build a reproducible ETL pipeline using Python
+Store standings in a MySQL database for analytics
 
 
 
@@ -34,11 +38,11 @@ The project demonstrates an end-to-end data pipeline that automatically retrieve
 
 premier-league-standings-api/
 
- main.py                  # Python ETL script (API → MySQL)
- analysis.ipynb           # Exploratory analysis & testing notebook
- .env                     # API keys & DB secrets (ignored in Git)
- .gitignore               # Prevents secrets & temp files from committing
- README.md                # Project documentation
+ -  main.py                  # Python ETL script (API → MySQL)
+ - analysis.ipynb           # Exploratory analysis & testing notebook
+ - .env                     # API keys & DB secrets (ignored in Git)
+ -  .gitignore               # Prevents secrets & temp files from committing
+ -   README.md                # Project documentation
 
 
 
@@ -110,14 +114,21 @@ The notebook prints:
 [SUCCESS] – Upsert attempted for 20 rows!
 All database connections now closed.
 
+### Final MySQL Output
 
-And MySQL Workbench displays the final table, sorted by position:
+The standings table is populated and validated in MySQL,
+sorted by league position and ready for analytical queries.
 
-| position | team            | played | won | lost | points |
-| -------- | --------------- | ------ | --- | ---- | ------ |
-| 1        | Manchester City | 38     | 29  | 3    | 93     |
-| 2        | Liverpool       | 38     | 28  | 2    | 92     |
-| ...      | ...             | ...    | ... | ...  | ...    |
+The query below confirms that the standings table was successfully populated
+and sorted correctly by league position.
+
+Only the top teams are shown for clarity; the full dataset is available in MySQL
+for further analysis and BI integration.
+
+
+<img width="714" height="443" alt="Screenshot (635)" src="https://github.com/user-attachments/assets/aa1c44f3-6142-4fd5-a8b7-a39bee928cdb" />
+
+
 
 ---
 
