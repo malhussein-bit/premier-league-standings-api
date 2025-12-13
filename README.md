@@ -233,7 +233,7 @@ sql
 
 
 
-## 📬 Contact
+## Contact
 
 **Mohammad Al Hussein**
 [alhussein.m65@gmail.com](mailto:alhussein.m65@gmail.com)
@@ -242,4 +242,3 @@ GitHub: [https://github.com/malhussein-bit](https://github.com/malhussein-bit)
 
 
 
-└── README.md                # Project documentation
