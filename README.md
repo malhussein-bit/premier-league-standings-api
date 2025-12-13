@@ -6,11 +6,13 @@
 
 ### **API → Python → MySQL → Query-Ready Table**
 ### Overview
-During football season in public places all people who use the Wi-Fi would like to see the ranking and positions of their favourite team , the traffic then get heavy on the local router and people can not get a connection , this creates crowd unsettlement and ruins the atmosphere.
-The idea is to connect to a live football standing API and get the results on the screen as a table. 
-The project demonstrates an end-to-end data pipeline that automatically retrieves Premier League standings from a public API, processes the data using Python, and loads it into a MySQL relational database using a clean and safe upset (INSERT…ON DUPLICATE KEY UPDATE) workflow.
+During live football matches in public venues, heavy traffic on shared networks can make accessing standings unreliable.
+This project demonstrates how to retrieve live Premier League standings from an API, process them using Python, and persist them in a MySQL database for fast, reliable queryin
 
-
+## Prerequisites
+- Python 3.10+
+- MySQL 8.0 running locally
+- RapidAPI account with Premier League standings access
 
 ## **Tools Used**
 
@@ -54,9 +56,10 @@ premier-league-standings-api/
 The Python script sends a GET request to the standings endpoint using your API key stored in `.env`.
 
 
+```python
 response = requests.get(API_URL, headers={"X-RapidAPI-Key": api_key})
 data = response.json()
-
+```
 
 
 
@@ -103,20 +106,24 @@ CREATE TABLE standings (
 
 To avoid duplicates, the SQL script uses:
 
-INSERT INTO standings (season, position, team_id, team, played, won, draw, lost,
-                       goals_for, goals_against, goal_diff, points, form)
+```sql
+INSERT INTO standings (
+    season, position, team_id, team, played, won, draw, lost,
+    goals_for, goals_against, goal_diff, points, form
+)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-* ON DUPLICATE KEY UPDATE
-* position = VALUES(position),
-* played = VALUES(played),
-* won = VALUES(won),
-* draw = VALUES(draw),
-* lost = VALUES(lost),
-* goals_for = VALUES(goals_for),
-* goals_against = VALUES(goals_against),
-* goal_diff = VALUES(goal_diff),
-* points = VALUES(points),
-* form = VALUES(form);
+ON DUPLICATE KEY UPDATE
+    position = VALUES(position),
+    played = VALUES(played),
+    won = VALUES(won),
+    draw = VALUES(draw),
+    lost = VALUES(lost),
+    goals_for = VALUES(goals_for),
+    goals_against = VALUES(goals_against),
+    goal_diff = VALUES(goal_diff),
+    points = VALUES(points),
+    form = VALUES(form);
+```
 
 
 This ensures:
@@ -160,15 +167,16 @@ for further analysis and BI integration.
 
 ### **1. Clone the repository**
 
-bash
+```bash
 git clone https://github.com/malhussein-bit/premier-league-standings-api.git
+```
 
 
 ### **2. Install dependencies**
 
-bash
+```bash
 pip install mysql-connector-python python-dotenv requests pandas
-
+```
 
 ### **3. Update `.env` file**
 
