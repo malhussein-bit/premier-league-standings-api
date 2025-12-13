@@ -136,7 +136,7 @@ for further analysis and BI integration.
 
 ### **Table: standings**
 
-sql
+```sql
 CREATE TABLE standings (
     season INT NOT NULL,
     position INT NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE standings (
     form VARCHAR(20),
     PRIMARY KEY (season, team_id)
 );
-
+```
 
 
 
